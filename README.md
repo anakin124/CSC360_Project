@@ -3,12 +3,11 @@
 ## Overview
 The purpose of this project is to simulate a real world environment where there is a person on a public internet attempting to input personal information into a website. There will also be a nefarious machine on this public network attempting to gain access to that personal information by using Wireshark. We will have this same setup on a web server hosting an HTTP website and another that is hosting an HTTPS website. We will then compare how easy it is for the malicious machine to gain personal information on both of them.
 ### Setup
-5 VMs:
+4 VMs:
 - VM1 - HTTP Website Server
 - VM2 - HTTPS Website Server
-- VM2 - Client that accesses both hosted websites
-- VM3 - Nefarious packet sniffer
-- VM4 - PFSense in order to put all of the vms on the same network
+- VM3 - Client that accesses both hosted websites
+- VM4 - Nefarious packet sniffer
 
 ### Execution 
 Host two websites that have some form of information intake from the users. One will be on HTTP and the other HTTPS. A client (VM3) will access both of them while on the same network as the nefarious packet sniffer (VM4) attempts to get the info.
