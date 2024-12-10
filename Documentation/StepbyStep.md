@@ -45,5 +45,86 @@ Install the iso of PFSense and use default settings.
 ## Step 2: Setting up the Network
 
 ## Step 3: Hosting the Websites
+There are several steps that need to happen for both of the servers to host our websites. Firstly, we need to set up the directory for our flask app to run on apache. To do this copy all of the files from [here] (Website) to the /var/www/html file that should be on the machine after installing apache2. Next we need to enable the mod_wsgi module to make sure that the app works with apache2.
+```
+  sudo a2enmod wsgi
+  sudo systemctl restart apache2
+```
+Now we need to create several files including an html.wsgi file in /var/www/html. It should look something like this.
+```
+import sys
+sys.path.insert(0, "/path/to/your/flask/app")
 
+from app import app as application  # Replace `app` with your Flask app's name
+```
+Next we create a html.conf file in /etc/apache2/sites-available/html.conf
+```
+sudo vim /etc/apache2/sites-available/html.conf
+```
+The files contents should look like this
+```
+<VirtualHost *:80>
+    ServerName yourdomain.com
+
+    WSGIDaemonProcess myflaskapp python-path=/path/to/your/flask/app:/path/to/your/venv/lib/python3.x/site-packages
+    WSGIScriptAlias / /path/to/your/flask/app/app.wsgi
+
+    <Directory /path/to/your/flask/app>
+        Require all granted
+    </Directory>
+
+    Alias /static /path/to/your/flask/app/static
+    <Directory /path/to/your/flask/app/static>
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+The final step for the HTTP server is to enable the site.
+```
+sudo a2ensite html
+sudo systemctl reload apache2
+```
+The steps for setting up our HTTPS server are almost identical to the above steps with several key differences. Firstly we need to self-assign an SSL key.
+```
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+```
+Now we need to edit the previous html.conf file in /etc/apache2/sites-available/ to enable the usage of HTTPS. The contents should like something like this.
+```
+<VirtualHost *:80>
+    ServerName yourdomain.com
+    Redirect / https://yourdomain.com/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName yourdomain.com
+
+    WSGIDaemonProcess myflaskapp python-path=/path/to/your/flask/app:/path/to/your/venv/lib/python3.x/site-packages
+    WSGIScriptAlias / /path/to/your/flask/app/app.wsgi
+
+    <Directory /path/to/your/flask/app>
+        Require all granted
+    </Directory>
+
+    Alias /static /path/to/your/flask/app/static
+    <Directory /path/to/your/flask/app/static>
+        Require all granted
+    </Directory>
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+    SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Now we just need to enable SSL in Apache.
+```
+sudo a2enmod ssl
+sudo a2ensite myflaskapp
+sudo systemctl reload apache2
+```
 ## Step 4: Packet Sniffing
