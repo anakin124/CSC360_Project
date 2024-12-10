@@ -1,8 +1,8 @@
 # A Step by Step Guide to Replicate This Project
 ## Step 1: Setting up VMs
-The first step will be to make 4 different vms. I will list the steps for what to download on each of the VM's here. When you first make these VM's you can use default VMWare settings and use NAT internet. This will be changed 
-later but makes it easy to install the required softwares.
-### VM 1- HTTP Server
+The first step will be to make 5 different vms. I will list the steps for what to download on each of the VM's here. When you first make these VM's you can use default VMWare settings and use NAT internet. This will be changed later but makes it easy to install the required softwares.
+IMPORTANT NOTE: For VM's 1-4 the iso file should be the latest version of lubuntu. For VM5 the iso should be the latest version of PFSense.
+### VM 1- HTTP Website Server
 This VM will need the necessary software to host a website and will have to download the code from this repository.
 It will need to download python which can be done from the terminal with this command. 
 ```
@@ -21,11 +21,20 @@ Next we need to get flask for python -
   sudo apt install python3-flask
 ```
 
-### VM 2- Client
+### VM 2- HTTPS Website Server
+You need to just repeat the steps from VM1.
 
-### VM 3- Nefarious Packet Sniffer
+### VM 3- Client
+Nothing needs to be done for the client as they will just be accessing websites hosted by the other VM's through any web browser on the VM.
 
-### VM 4- PFSense
+### VM 4- Nefarious Packet Sniffer
+You will need to install wireshark on this VM. To do so open a terminal and use this command -
+```
+  sudo apt-get install wireshark
+```
+
+### VM 5- PFSense
+Install the iso of PFSense and use default settings.
 
 ## Step 2: Setting up the Network
 
