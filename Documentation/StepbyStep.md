@@ -20,9 +20,15 @@ Next we need to get flask for python -
 ```
   sudo apt install python3-flask
 ```
-
+The final dependency we have for the HTTP server is mod wsgi. This allows apache2 to run flask apps -
+```
+ sudo apt install libapache2-mod-wsgi-py3
+```
 ### VM 2- HTTPS Website Server
-You need to just repeat the steps from VM1.
+To start repeat the steps from the HTTP server. In addition to this we will need to install OpenSSL in order to self-assign an SSL key.
+```
+  sudo apt install openssl
+```
 
 ### VM 3- Client
 Nothing needs to be done for the client as they will just be accessing websites hosted by the other VM's through any web browser on the VM.
