@@ -36,6 +36,13 @@ You will need to install wireshark on this VM. To do so open a terminal and use 
 ```
 
 ## Step 2: Setting up the Network
+To packet sniff an http protocol, there are a few steps. 
+Begin a capture in wireshark when the user enters the website. 
+Once the user has inputted his data, you can use wireshark to filter out http traffic and look at the captured packets. 
+Identify the GET response message for the specified page and click on it.
+At the bottom in the information page for the packet, there should be a section that it labeled hypertext transfer protocol (http). This is where all of the important page information is located.
+Click on the arrow next to this section to display the page information.
+
 
 ## Step 3: Hosting the Websites
 There are several steps that need to happen for both of the servers to host our websites. Firstly, we need to set up the directory for our flask app to run on apache. To do this copy all of the files from [here] (Website) to the /var/www/html file that should be on the machine after installing apache2. Next we need to enable the mod_wsgi module to make sure that the app works with apache2.
