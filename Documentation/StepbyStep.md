@@ -127,4 +127,5 @@ sudo a2enmod ssl
 sudo a2ensite myflaskapp
 sudo systemctl reload apache2
 ```
+You should now be able to access both of thesee sites through a web browser by typing the IP address of the machine in the search bar.
 ## Step 4: Packet Sniffing
