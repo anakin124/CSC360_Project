@@ -21,4 +21,5 @@ We used flask to host the websites because it is very lightweight and easy to us
 ### Documentation
 The documentation offers a detailed step by step guide for how you can replicate this project exactly, consolidated into a (relatively) brief markdown file. This file can be found [here](/Documentation/StepbyStep.md).
 ### Network Topology
-Lastly we thought it was important to document what the network topolgy of all of these VM's along with the computer they are being hosted on looks like. We have the network topology diagram and explanation [here](/Documentation/NetworkTopology.md).
+Lastly we thought it was important to document what the network topolgy of all of these VM's along with the computer they are being hosted on looks like. We have the network topology diagram and explanation [here](/Documentation/NetworkTopology.PNG).
+Or you can view the google doc here: https://docs.google.com/document/d/16zt9p6vBz7g9Np3NtqPwjFW48Vb2PNB3P4qk81FhC4s/edit?usp=sharing 
