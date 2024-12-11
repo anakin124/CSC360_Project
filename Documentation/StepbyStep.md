@@ -89,37 +89,39 @@ sudo systemctl reload apache2
 ```
 The steps for setting up our HTTPS server are almost identical to the above steps with several key differences. Firstly we need to self-assign an SSL key.
 ```
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/mydomain.key -out /etc/ssl/certs/mydomain.crt
 ```
 Now we need to edit the previous html.conf file in /etc/apache2/sites-available/ to enable the usage of HTTPS. The contents should like something like this.
 ```
-<VirtualHost *:80>
-    ServerName yourdomain.com
-    Redirect / https://yourdomain.com/
+<VirtualHost *:80> 
+        ServerName 192.168.38.139 
+        DocumentRoot /var/www/html 
+        # Redirect HTTP to HTTPS 
+        Redirect permanent / https://192.168.38.139 
+</VirtualHost> 
+<VirtualHost *:443> 
+        ServerName 192.168.38.139 
+        DocumentRoot /var/www/html 
+        # SSL Configuration 
+        SSLEngine on 
+        SSLCertificateFile /etc/ssl/mydomain/mydomain.crt 
+        SSLCertificateKeyFile /etc/ssl/mydomain/mydomain.key 
+        # Serve static files from the templates directory 
+        <Directory /var/www/html/templates> 
+                Options Indexes FollowSymLinks 
+                AllowOverride None 
+                Require all granted 
+        </Directory> 
+        # WSGI configuration for Flask 
+        WSGIDaemonProcess html python-path=/var/www/html
+        WSGIScriptAlias / /var/www/html/html.wsgi 
+        <Directory /var/www/html> 
+                WSGIProcessGroup html 
+                WSGIApplicationGroup %{GLOBAL} 
+                Require all granted 
+        </Directory> 
 </VirtualHost>
 
-<VirtualHost *:443>
-    ServerName yourdomain.com
-
-    WSGIDaemonProcess myflaskapp python-path=/path/to/your/flask/app:/path/to/your/venv/lib/python3.x/site-packages
-    WSGIScriptAlias / /path/to/your/flask/app/app.wsgi
-
-    <Directory /path/to/your/flask/app>
-        Require all granted
-    </Directory>
-
-    Alias /static /path/to/your/flask/app/static
-    <Directory /path/to/your/flask/app/static>
-        Require all granted
-    </Directory>
-
-    SSLEngine on
-    SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
-    SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
-
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
 ```
 Now we just need to enable SSL in Apache.
 ```
