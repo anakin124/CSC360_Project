@@ -136,3 +136,9 @@ sudo systemctl reload apache2
 ```
 You should now be able to access both of thesee sites through a web browser by typing the IP address of the machine in the search bar.
 ## Step 4: Packet Sniffing
+To packet sniff an http protocol, there are a few steps. 
+Begin a capture in wireshark when the user enters the website. 
+Once the user has inputted his data, you can use wireshark to filter out http traffic and look at the captured packets. 
+Identify the GET response message for the specified page and click on it.
+At the bottom in the information page for the packet, there should be a section that it labeled hypertext transfer protocol (http). This is where all of the important page information is located.
+Click on the arrow next to this section to display the page information.
