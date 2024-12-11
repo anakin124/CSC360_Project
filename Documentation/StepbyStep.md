@@ -64,23 +64,28 @@ sudo vim /etc/apache2/sites-available/html.conf
 The files contents should look like this
 ```
 <VirtualHost *:80>
-    ServerName yourdomain.com
+    ServerAdmin webmaster@192.168.38.138
+    ServerName 192.168.38.138  
+    DocumentRoot /var/www/html
 
-    WSGIDaemonProcess myflaskapp python-path=/path/to/your/flask/app:/path/to/your/venv/lib/python3.x/site-packages
-    WSGIScriptAlias / /path/to/your/flask/app/app.wsgi
-
-    <Directory /path/to/your/flask/app>
+    # Serve static files from templates directory
+    <Directory /var/www/html/templates>
+        Options Indexes FollowSymLinks
+        AllowOverride None
         Require all granted
     </Directory>
 
-    Alias /static /path/to/your/flask/app/static
-    <Directory /path/to/your/flask/app/static>
+    # WSGI configuration for Flask
+    WSGIDaemonProcess html python-path=/var/www/html
+    WSGIScriptAlias / /var/www/html/html.wsgi
+
+    <Directory /var/www/html>
+        WSGIProcessGroup html
+        WSGIApplicationGroup %{GLOBAL}
         Require all granted
     </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
+
 ```
 The final step for the HTTP server is to enable the site.
 ```
